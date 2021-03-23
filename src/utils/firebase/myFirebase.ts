@@ -19,11 +19,13 @@ class Firebase{
 
     auth:firebase.auth.Auth
     database:firebase.database.Database
+    storage:firebase.storage.Storage
 
     constructor(){
       firebase.initializeApp( this.FIREBASE_CONFIG );
       this.auth = this.firebase.auth();
       this.database = this.firebase.database();
+      this.storage = this.firebase.storage();
     }
 }
 

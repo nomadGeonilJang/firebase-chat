@@ -1,10 +1,18 @@
-import { createStore, applyMiddleware } from "redux";
+import Redux, {  createStore, applyMiddleware, compose } from "redux";
+import { composeWithDevTools } from 'redux-devtools-extension';
 import promiseMiddleware from "redux-promise";
 import ReduxThunk from "redux-thunk";
-import reducer from "utils/redux/reducers/root";
 
+import rootReducer from "utils/redux/reducers/root";
 
-const createStoreWithMiddleware = applyMiddleware( promiseMiddleware, ReduxThunk )( createStore );
-const store = createStoreWithMiddleware( reducer );
+const middlewares:Redux.Middleware[] = [  promiseMiddleware, ReduxThunk ];
+
+const enhancerDev = composeWithDevTools( applyMiddleware( ...middlewares ) );
+const enhancer = compose( applyMiddleware( ...middlewares ) );
+
+// const createStoreWithMiddleware = applyMiddleware( promiseMiddleware, ReduxThunk )( createStore );
+const store = createStore( 
+  rootReducer, 
+  process.env.NODE_ENV !== 'production' ? enhancerDev : enhancer );
 
 export default store;

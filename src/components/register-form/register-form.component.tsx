@@ -45,15 +45,14 @@ function RegisterForm() {
             image: createdUser.user?.photoURL
           } );
       }
-    
     } catch ( error ) {
-      setErrorsFromSubmit( error.message );
-    }finally{
       setLoading( false );
+      setErrorsFromSubmit( error.message );
     }
   };
 
- 
+
+
   return (
     <RegisterContainer >
       <h2>Register G-Chat</h2>

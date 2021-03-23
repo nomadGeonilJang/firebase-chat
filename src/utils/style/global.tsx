@@ -3,21 +3,21 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
     ${reset};
-    html{
-        height:100%;
-    }
     *{
         box-sizing:border-box;
     }
+    html{
+        height:100%;
+    }
+  
     body{
         height:100%;
         padding: 20px 60px;
         font-size:12px;
         font-family: 'Noto Sans KR', sans-serif;
         
-        @media screen and (max-width: 800px){
-            padding:10px;
-        }
+        min-width:1080px;
+        overflow:auto;
     }
     
     a{
