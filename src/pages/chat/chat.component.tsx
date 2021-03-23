@@ -3,20 +3,24 @@ import styled from "styled-components";
 
 import MainPanel from 'components/main/main-panel/main-panel.component';
 import SidePanel from 'components/side/side-panel/side-panel.component';
+import color from 'utils/style/color';
+import md5 from 'md5';
+import { useCurrentChatRoom } from 'utils/redux/reducers/chat-room/chat-room.hook';
 
 function Chat() {
+
+  const chatRoom = useCurrentChatRoom();
   return (
     <ChatContainer>
-      <SidePanel/>
-      <MainPanel/>
+      <SidePanel key={md5( "SidePanel" )}/>
+      <MainPanel key={chatRoom.currentChatRoom.id}/>
     </ChatContainer>
   );
 }
 
 const ChatContainer = styled.main`
-  background-color:purple;
+  background-color:${color.darkBlue};
   font-size:1.5rem;
-
   height:100%;
   min-width:1080px;
 

@@ -23,5 +23,6 @@ const SidePanelContainer = styled.aside`
   background-color:${color.darkBlue};
   padding:20px;
   color:white;
+  border-right:.2rem solid #ececec;
 `;
 export default SidePanel;
