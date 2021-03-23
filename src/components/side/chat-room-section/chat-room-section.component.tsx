@@ -1,11 +1,172 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import styled from "styled-components";
+
+import { Button, Form, Modal } from 'react-bootstrap';
+import { FaPlus } from "react-icons/fa";
+import { IoChatboxEllipsesOutline } from "react-icons/io5";
+
+import { useCurrentUser } from 'utils/redux/reducers/user/user.hook';
+import myFirebase from 'utils/firebase/myFirebase';
+import color from 'utils/style/color';
+import ChatRoom from 'types/chat-room';
+import { useCurrentChatRoom, useSetCurrentChatRoom } from 'utils/redux/reducers/chat-room/chat-room.hook';
+
 
 function ChatRoomSection() {
+
+  const [ show, setShow ] = useState( false );
+  const [ { name, description }, setRoomState ] = useState( INIT_ROOM_STATE );
+  const [ chatRooms, setChatRooms ] = useState<ChatRoom[]>( [] );
+  
+  const { user } = useCurrentUser();
+  const { currentChatRoom  } = useCurrentChatRoom();
+  const setCurrentChatRoom = useSetCurrentChatRoom();
+
+  
+  const handleChangeFormInput = ( e:React.ChangeEvent<HTMLInputElement> ) => {
+    const { name, value } = e.target;
+    setRoomState( prev => ( { ...prev, [ name ]: value } ) );
+  };
+
+  const handleClose = () => setShow( false );
+  const handleShow = () => setShow( true );
+
+  const handleMakeNewRoom = async () => {
+    setShow( false );
+    const chatRoomRef = myFirebase.database.ref( "chatRooms" );
+    const key = chatRoomRef.push().key!;
+    const newChatRoomObj = {
+      id: key,
+      description,
+      name,
+      createdBy: {
+        name: user!.displayName,
+        image: user!.photoURL
+      }
+    };
+    try {
+      await chatRoomRef.child( key ).update( newChatRoomObj );
+    } catch ( error ) {
+      alert( error.message );
+    }
+    setRoomState( INIT_ROOM_STATE );
+  };
+
+  useEffect( () => {
+    let isFirst = true;
+    const  listener = myFirebase.database.ref( "chatRooms" );
+    listener.on( "child_added", ( snapshot ) => {
+      setChatRooms( prev => [ snapshot.val(), ...prev ] );
+      
+      if( isFirst && snapshot.exists ){
+        isFirst = false;
+        setCurrentChatRoom( snapshot.val() );
+      }
+    } );
+    return () => {
+      listener.off();
+    };
+  }, [] );
+
+  const handleOpenChat = ( chatRoom:ChatRoom ) => {
+    setCurrentChatRoom( chatRoom );
+  };
+
+  const makeRoom = ( room:ChatRoom ) => (
+    <li key={room.id} className={currentChatRoom.id === room.id ? "active" : ""}onClick={() => handleOpenChat( room )}>
+      # {room.name}
+    </li>
+  );
+
   return (
-    <div>ChatRoomSection
-            
-    </div>
+    <>
+      <ChatRoomSectionContainer>
+        <header>
+          <span><IoChatboxEllipsesOutline/> chat rooms</span>
+          <FaPlus className="plus" onClick={handleShow}/>
+        </header>
+        <ul className="rooms">
+          {chatRooms.map( makeRoom )}
+        </ul>
+      </ChatRoomSectionContainer>
+      <CreateModal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>CREATE NEW CHAT</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form className="chat-form">
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label >ROOM&apos;S NAME</Form.Label>
+              <Form.Control value={name} name="name" onChange={handleChangeFormInput} type="text" placeholder="Enter a chat room's name" />
+            </Form.Group>
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label className="form-label">DESCRIPTION</Form.Label>
+              <Form.Control value={description} name="description" onChange={handleChangeFormInput} type="text" placeholder="Enter a chat room's description" />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="none" className="cancel-btn" onClick={handleClose}>
+            CANCEL
+          </Button>
+          <Button variant="none" className="create-btn" onClick={handleMakeNewRoom}>
+            CREATE
+          </Button>
+        </Modal.Footer>
+      </CreateModal>
+    </>
   );
 }
 
+
+
+const INIT_ROOM_STATE = {
+  name: "",
+  description: "",
+}; 
+
+const ChatRoomSectionContainer = styled.section`
+  header{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    text-transform:uppercase; 
+  }
+
+  .rooms{
+    font-size:1.1rem;
+    padding-left:10px;
+    li{
+      padding:5px;
+      cursor: pointer;
+      &:hover{
+        opacity:0.8;
+      }
+    }
+    li.active{
+      font-weight:bold;
+      background-color:${color.yellow};
+      color:${color.brown};
+    }
+    
+    
+  }
+`;
+
+
+const CreateModal = styled( Modal )`
+  label{
+    margin-bottom:5px;
+  }
+  .cancel-btn{
+    background:${color.pink};
+    color:white;
+  }
+  .create-btn{
+    background:${color.green};
+    color:white;
+  }
+`;
 export default ChatRoomSection;

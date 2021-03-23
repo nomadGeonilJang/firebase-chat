@@ -19,7 +19,7 @@ const ChatContainer = styled.main`
 
   height:100%;
   min-width:1080px;
-  padding:20px;
+
   display:grid;
   grid-template-columns:300px 7fr;
   justify-content:center;

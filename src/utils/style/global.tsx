@@ -12,7 +12,7 @@ const GlobalStyles = createGlobalStyle`
   
     body{
         height:100%;
-        padding: 20px 60px;
+     
         font-size:12px;
         font-family: 'Noto Sans KR', sans-serif;
         
