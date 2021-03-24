@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { RegisterContainer } from "./register-form.styles";
-
-import md5 from "md5";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import md5 from "md5";
+import { RegisterContainer } from "./register-form.styles";
+
 import myFirebase from 'utils/firebase/myFirebase';
 
 
@@ -17,13 +17,12 @@ type FormState = {
 function RegisterForm() {
 
   const { register, handleSubmit, watch, errors } = useForm();
-  const password = useRef<unknown>( null );
-  password.current = watch( "password" );
 
-  
+  const password = useRef<unknown>( null );
   const [ loading, setLoading ] = useState( false );
   const [ errorsFromSubmit, setErrorsFromSubmit ] = useState( "" );
 
+  password.current = watch( "password" );
 
   const onSignUp = async ( { email, password, name: displayName }:FormState ) => {
     try {

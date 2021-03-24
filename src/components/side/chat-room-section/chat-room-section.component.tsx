@@ -1,27 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import styled from "styled-components";
-
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { FaPlus } from "react-icons/fa";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
+import { ChatRoomSectionContainer, CreateModal } from './chat-room-section.styles';
 
+import { useCurrentChatRoom, useSetCurrentChatRoom } from 'utils/redux/reducers/chat-room/chat-room.hook';
 import { useCurrentUser } from 'utils/redux/reducers/user/user.hook';
 import myFirebase from 'utils/firebase/myFirebase';
-import color from 'utils/style/color';
 import ChatRoom from 'types/chat-room';
-import { useCurrentChatRoom, useSetCurrentChatRoom } from 'utils/redux/reducers/chat-room/chat-room.hook';
-
 
 function ChatRoomSection() {
+
+  const user = useCurrentUser();
+  const { currentChatRoom  } = useCurrentChatRoom();
+  const setCurrentChatRoom = useSetCurrentChatRoom();
 
   const [ show, setShow ] = useState( false );
   const [ { name, description }, setRoomState ] = useState( INIT_ROOM_STATE );
   const [ chatRooms, setChatRooms ] = useState<ChatRoom[]>( [] );
   
-  const user = useCurrentUser();
-  const { currentChatRoom  } = useCurrentChatRoom();
-  const setCurrentChatRoom = useSetCurrentChatRoom();
-
   
   const handleChangeFormInput = ( e:React.ChangeEvent<HTMLInputElement> ) => {
     const { name, value } = e.target;
@@ -73,7 +70,7 @@ function ChatRoomSection() {
   };
 
   const makeRoom = ( room:ChatRoom ) => (
-    <li key={room.id} className={currentChatRoom.id === room.id ? "active" : ""}onClick={() => handleOpenChat( room )}>
+    <li key={room.id} className={currentChatRoom.id === room.id ? "active" : ""} onClick={() => handleOpenChat( room )}>
       # {room.name}
     </li>
   );
@@ -90,10 +87,10 @@ function ChatRoomSection() {
         </ul>
       </ChatRoomSectionContainer>
       <CreateModal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>CREATE NEW CHAT</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+        <CreateModal.Header closeButton>
+          <CreateModal.Title>CREATE NEW CHAT</CreateModal.Title>
+        </CreateModal.Header>
+        <CreateModal.Body>
           <Form className="chat-form">
             <Form.Group controlId="formBasicEmail">
               <Form.Label >ROOM&apos;S NAME</Form.Label>
@@ -104,15 +101,15 @@ function ChatRoomSection() {
               <Form.Control value={description} name="description" onChange={handleChangeFormInput} type="text" placeholder="Enter a chat room's description" />
             </Form.Group>
           </Form>
-        </Modal.Body>
-        <Modal.Footer>
+        </CreateModal.Body>
+        <CreateModal.Footer>
           <Button variant="none" className="cancel-btn" onClick={handleClose}>
             CANCEL
           </Button>
           <Button variant="none" className="create-btn" onClick={handleMakeNewRoom}>
             CREATE
           </Button>
-        </Modal.Footer>
+        </CreateModal.Footer>
       </CreateModal>
     </>
   );
@@ -125,53 +122,4 @@ const INIT_ROOM_STATE = {
   description: "",
 }; 
 
-const ChatRoomSectionContainer = styled.section`
-  header{
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    text-transform:uppercase; 
-  }
-
-  .plus{
-    cursor: pointer;
-  }
-
-  .rooms{
-    font-size:1.1rem;
-    padding-left:10px;
-    li{
-      border-radius:5px;
-      padding:5px;
-      cursor: pointer;
-      &:hover{
-        opacity:0.8;
-      }
-    }
-    li.active{
-      
-      font-weight:bold;
-      background-color:${color.yellow};
-      color:${color.brown};
-    }
-    
-    
-  }
-`;
-
-
-const CreateModal = styled( Modal )`
-  label{
-    margin-bottom:5px;
-  }
-  .cancel-btn{
-    background:${color.pink};
-    color:white;
-  }
-  .create-btn{
-    background:${color.green};
-    color:white;
-  }
-`;
 export default ChatRoomSection;

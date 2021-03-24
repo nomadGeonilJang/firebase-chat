@@ -1,19 +1,18 @@
 import React from 'react';
-import styled from "styled-components";
 import mement from "moment";
-import { Media } from 'react-bootstrap';
+import { MessageMedia } from './message.styles';
+
 import { default as MessageType } from 'types/message';
 import { useCurrentUser } from 'utils/redux/reducers/user/user.hook';
-import color from 'utils/style/color';
 
 type MessageProps = {
     message:MessageType
 }
+
 function Message( { message }:MessageProps ) {
 
   const user = useCurrentUser();
   const isMine = user?.uid === message.user.id;
-
 
   return (
     <MessageMedia>
@@ -21,7 +20,7 @@ function Message( { message }:MessageProps ) {
         src={message.user.image}
         alt={message.user.name}
       />
-      <Media.Body>
+      <MessageMedia.Body>
         <h6>{message.user.name}
           <span>{mement( message.timestamp ).fromNow()}</span>
         </h6>
@@ -32,43 +31,10 @@ function Message( { message }:MessageProps ) {
               {message.content}
             </p>
           )}
-      </Media.Body>
+      </MessageMedia.Body>
     </MessageMedia>
   );
 }
 
-const MessageMedia = styled( Media )`
-    margin-bottom:10px;
-    color:white;
-    img{
-        border-radius:10px;
-        width:48px;
-        height:48px;
-        margin-right:10px;
-    }
-    h6{
-        font-size:1.2rem;
-        margin-bottom:5px;
-    }
-    span{
-        margin-left:5px;
-        font-size:1.1rem;
-    }
-    p{
-        padding:5px;
-        background-color:gray;
-        border-radius:5px;
-    }
-    p.me{
-        background-color:${color.yellow};
-        color:${color.brown};
-    }
-    img.content-image{
-      width:100%;
-      height:100%;
-      max-width:300px;
-      max-height:900px;
-    }
-`;
 
 export default Message;

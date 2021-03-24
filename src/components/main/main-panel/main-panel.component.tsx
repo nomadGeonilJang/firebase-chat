@@ -1,21 +1,29 @@
-import Loading from 'components/loading/loading.component';
 import React, { useEffect, useRef, useState } from 'react';
-import styled from "styled-components";
+import { MainPanelContainer, MessageSectionContainer } from './main-panel.styles';
+
+import Loading from 'components/loading/loading.component';
+import MessageForm from 'components/main/message-form/message-form.component';
+import MessageHeader from 'components/main/message-header/message-header.component';
+import MessageSection from 'components/main/message-section/message-section';
+
 import Message from 'types/message';
 import myFirebase from 'utils/firebase/myFirebase';
 import { useCurrentChatRoom } from 'utils/redux/reducers/chat-room/chat-room.hook';
-import color from 'utils/style/color';
-import MessageForm from '../message-form/message-form';
-import MessageHeader from '../message-header/message-header';
-import MessageSection from '../message-section/message-section';
+
 
 function MainPanel() {
 
   const chatRoom = useCurrentChatRoom();
+
   const messageRef = useRef( myFirebase.database.ref( "messages" ) );
+
   const [ messages, setMessage ] =  useState<Message[]>( [] );
   const [ messageLoading, setMessageLoading ] = useState( true );
+  const [ searchTerm, setSearchTerm ] = useState( "" );
+  const [ searchResults, setSearchResult ] = useState<Message[]>( [] );
+  const [ searchLoading, setSearchLoading ] = useState( false );
 
+ 
   useEffect( () => {
     if( chatRoom.currentChatRoom.id ){
       const messageList:Message[] = [];
@@ -27,10 +35,6 @@ function MainPanel() {
         } );
     }
   }, [ chatRoom ] );
-
-  const [ searchTerm, setSearchTerm ] = useState( "" );
-  const [ searchResults, setSearchResult ] = useState<Message[]>( [] );
-  const [ searchLoading, setSearchLoading ] = useState( false );
 
   const handleChangeSearch = ( e:React.ChangeEvent<HTMLInputElement> ) => {
     setSearchTerm( e.target.value );
@@ -56,10 +60,6 @@ function MainPanel() {
    
   }, [ searchTerm, messages ] );
 
-
-
-
-
   return (
     <MainPanelContainer>
       <MessageHeader onSearch={handleChangeSearch}/>
@@ -72,17 +72,5 @@ function MainPanel() {
   );
 }
 
-const MainPanelContainer = styled.section`
-    background-color:${color.darkBlue};
-    padding:10px;
-`;
-const MessageSectionContainer = styled.div`
-  border-radius:5px;
-  height:550px;
-  border:.2rem solid #ececec;
-  padding:1rem;
-  margin-bottom:1rem;
-  overflow-y:auto;
-`;
 
 export default MainPanel;

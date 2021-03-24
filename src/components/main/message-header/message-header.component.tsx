@@ -1,22 +1,23 @@
 import React from 'react';
-import styled from "styled-components";
+import { Accordion, Button, Card, FormControl, Image, InputGroup } from 'react-bootstrap';
 import { FaLock } from "react-icons/fa";
 import { FcSearch } from "react-icons/fc";
-import { Accordion, Button, Card, FormControl, Image, InputGroup } from 'react-bootstrap';
+import { MessageHeaderContainer } from './message-header.styles';
+
 import { useCurrentUser } from 'utils/redux/reducers/user/user.hook';
 import { useCurrentChatRoom } from 'utils/redux/reducers/chat-room/chat-room.hook';
 
-type MessageHeader ={
+type MessageHeaderProps ={
   onSearch:( e:React.ChangeEvent<HTMLInputElement> ) => void;
 }
-function MessageHeader( { onSearch }:MessageHeader ) {
+
+function MessageHeader( { onSearch }:MessageHeaderProps ) {
 
   const user = useCurrentUser();
   const chatRoom = useCurrentChatRoom();
 
   return (
     <MessageHeaderContainer>
-      
       <h2><FaLock/> <span>Room:  {chatRoom.currentChatRoom.name}</span></h2>
       <InputGroup className="mb-3">
         <InputGroup.Prepend>
@@ -61,43 +62,5 @@ function MessageHeader( { onSearch }:MessageHeader ) {
   );
 }
 
-const MessageHeaderContainer = styled.header`
-  color:white;
-  height:180px;
-  border:.2rem solid #ececec;
-  border-radius:5px;
-  padding:1rem;
-  margin-bottom:1rem;
-
-  display:grid;
-  grid-template-columns:repeat(2, 1fr);
-  grid-template-rows:repeat(3, 1fr);
-  grid-gap:5px;
-
-  .user-content{
-    img{
-      width:32px;
-      height:32px;
-      margin-right:10px;
-    }
-    p{
-      display:flex;
-      align-items:center;
-      justify-content:flex-end;
-
-    }
-  }
-
-  h2{
-    display:flex;
-    align-items:center;
-    span{
-      margin-left:10px;
-      display:flex;
-      align-items:center;
-      padding-top:1rem;
-    }
-  }
-`;
 
 export default MessageHeader;

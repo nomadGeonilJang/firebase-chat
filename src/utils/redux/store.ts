@@ -10,7 +10,6 @@ const middlewares:Redux.Middleware[] = [  promiseMiddleware, ReduxThunk ];
 const enhancerDev = composeWithDevTools( applyMiddleware( ...middlewares ) );
 const enhancer = compose( applyMiddleware( ...middlewares ) );
 
-// const createStoreWithMiddleware = applyMiddleware( promiseMiddleware, ReduxThunk )( createStore );
 const store = createStore( 
   rootReducer, 
   process.env.NODE_ENV !== 'production' ? enhancerDev : enhancer );

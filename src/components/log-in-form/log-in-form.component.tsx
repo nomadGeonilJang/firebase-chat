@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import myFirebase from 'utils/firebase/myFirebase';
 
-
 type FormState = {
     email:string;
     name:string;
@@ -13,12 +12,11 @@ type FormState = {
 }
 
 function LogInForm() {
-  
+
   const { register, handleSubmit, errors } = useForm();
   
   const [ loading, setLoading ] = useState( false );
   const [ errorsFromSubmit, setErrorsFromSubmit ] = useState( "" );
-
 
   const onLogIn = async ( { email, password }:FormState ) => {
     try {

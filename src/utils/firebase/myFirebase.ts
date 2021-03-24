@@ -1,4 +1,6 @@
 import firebase from "firebase/app";
+
+import "firebase/analytics";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
@@ -14,14 +16,13 @@ class Firebase{
     };
 
     firebase = firebase
-
     auth:firebase.auth.Auth
     database:firebase.database.Database
     storage:firebase.storage.Storage
 
     constructor(){
       firebase.initializeApp( this.FIREBASE_CONFIG );
-      // firebase.analytics();
+      firebase.analytics();
       this.auth = this.firebase.auth();
       this.database = this.firebase.database();
       this.storage = this.firebase.storage();

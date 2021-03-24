@@ -3,8 +3,8 @@ import React, { useRef, useEffect } from 'react';
 import styled from "styled-components";
 
 import Message from 'components/message/message.component';
-
 import Loading from 'components/loading/loading.component';
+
 import { default as MessageType } from 'types/message';
 
 type MessageSectionType = {
@@ -22,6 +22,7 @@ function MessageSection( { messages, messageLoading }:MessageSectionType ) {
       } );
     }
   }, [ messages ] );
+
   return (
     <MessageSectionContainer>
       {messageLoading ? <Loading/> : messages.map( message => <Message key={message.timestamp} message={message}/> )} 
@@ -30,8 +31,6 @@ function MessageSection( { messages, messageLoading }:MessageSectionType ) {
   );
 }
 
-const MessageSectionContainer = styled.section`
-    
-`;
+const MessageSectionContainer = styled.section``;
 
 export default MessageSection;

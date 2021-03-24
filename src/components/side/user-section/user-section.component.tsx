@@ -1,22 +1,20 @@
 import React, { useRef } from 'react';
-import styled from "styled-components";
 import mime from "mime-types";
-
 import{ IoIosChatboxes } from "react-icons/io";
 import { Dropdown, Image } from 'react-bootstrap';
+import { UserSectionContainer } from './user-section.styles';
+
 import { useClearUser, useCurrentUser, useSetPhotoURL } from 'utils/redux/reducers/user/user.hook';
 import myFirebase from 'utils/firebase/myFirebase';
 
-
-
 function UserSection() {
-
-  const fileRef = useRef<HTMLInputElement>( null );
 
   const user = useCurrentUser();
   const clearUser = useClearUser();
   const setPhotoURL = useSetPhotoURL();
 
+  const fileRef = useRef<HTMLInputElement>( null );
+  
   const handleLogOut = () => {
     myFirebase.auth.signOut();
     clearUser();
@@ -69,30 +67,5 @@ function UserSection() {
   );
 }
 
-const UserSectionContainer = styled.section`
- 
-  h3{
-   margin-bottom:10px;
-  }
-  .content{
-    display:flex;
-    margin-bottom:1rem;
-    align-items:center;
-
-    img{
-      width:50px;
-      height:50px;
-      margin-top:3px;
-      margin-right:15px;
-      background-color:red;
-    }
-  }
-
-  .toggle-btn{
-    background-color:transparent;
-    border:none;
-    
-  }
-`;
 
 export default UserSection;

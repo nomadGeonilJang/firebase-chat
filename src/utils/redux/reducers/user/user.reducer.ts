@@ -1,6 +1,7 @@
-import { User } from "types/user";
 import { UserAction } from "./user.action";
 import UserActionTypes from "./user.type";
+
+import { User } from "types/user";
 
 type USER_STATE = {
     user:User | null
@@ -10,8 +11,6 @@ const INITIAL_USER_STATE:USER_STATE = {
   user: null,
   isLoading: true
 };
-
-
 
 const userReducer = ( state:USER_STATE = INITIAL_USER_STATE, action:UserAction ) => {
   switch( action.type ){

@@ -6,9 +6,5 @@ export const setCurrentChatRoom = ( chatRoom:ChatRoom ) => ( {
   payload: chatRoom
 } );
 
-
-
-
-
 export type ChatRoomAction = 
 | ReturnType<typeof setCurrentChatRoom>
