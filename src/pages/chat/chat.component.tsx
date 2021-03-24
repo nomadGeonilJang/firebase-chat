@@ -6,25 +6,10 @@ import SidePanel from 'components/side/side-panel/side-panel.component';
 import color from 'utils/style/color';
 import md5 from 'md5';
 import { useCurrentChatRoom } from 'utils/redux/reducers/chat-room/chat-room.hook';
-import myFirebase from 'utils/firebase/myFirebase';
 
 function Chat() {
 
   const chatRoom = useCurrentChatRoom();
-
-
-  React.useEffect( () => {
-    myFirebase.database.ref( "users" ).on( "child_added", ( snap ) => {
-      console.log( snap.val() );
-      
-    } );
-      
-    
-
-
-  }, [] );
-
-
   return (
     <ChatContainer>
       <SidePanel key={md5( "SidePanel" )}/>

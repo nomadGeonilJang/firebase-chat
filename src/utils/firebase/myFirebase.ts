@@ -3,8 +3,6 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 import "firebase/database";
-
-
 class Firebase{
     FIREBASE_CONFIG = {
       apiKey: "AIzaSyDVuj1mQXiQq0AVkMdS-wXiXt3Zmp6WHWo",
@@ -23,6 +21,7 @@ class Firebase{
 
     constructor(){
       firebase.initializeApp( this.FIREBASE_CONFIG );
+      // firebase.analytics();
       this.auth = this.firebase.auth();
       this.database = this.firebase.database();
       this.storage = this.firebase.storage();

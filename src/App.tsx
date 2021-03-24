@@ -13,6 +13,7 @@ function App() {
   const [ initApp, setInitApp ] = useState( false );
   const [ isUserLoaded, setIsUserLoaded ] = useState( false );
 
+  console.log( "s" );
   useEffect( () => {
     myFirebase.auth.onAuthStateChanged( ( user ) => {
       setInitApp( true );
