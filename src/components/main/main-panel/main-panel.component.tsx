@@ -42,6 +42,9 @@ function MainPanel() {
           setMessageLoading( false );
         } );
     }
+    return () => {
+      messageRef.current.off();
+    };
   }, [ chatRoom ] );
 
   const handleChangeSearch = ( e:React.ChangeEvent<HTMLInputElement> ) => {
