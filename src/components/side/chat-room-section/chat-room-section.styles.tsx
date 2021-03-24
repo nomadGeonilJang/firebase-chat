@@ -9,6 +9,7 @@ header{
   align-items:center;
   justify-content:space-between;
   text-transform:uppercase; 
+  font-weight:bold;
 }
 
 .plus{
@@ -31,9 +32,7 @@ header{
     font-weight:bold;
     background-color:${color.yellow};
     color:${color.brown};
-  }
-  
-  
+  } 
 }
 `;
 

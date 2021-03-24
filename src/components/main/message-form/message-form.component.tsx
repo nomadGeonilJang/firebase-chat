@@ -6,7 +6,15 @@ import Message from 'types/message';
 import myFirebase from 'utils/firebase/myFirebase';
 import { useCurrentChatRoom } from 'utils/redux/reducers/chat-room/chat-room.hook';
 import { useCurrentUser } from 'utils/redux/reducers/user/user.hook';
+import ChatRoom from 'types/chat-room';
 
+
+const getPath = ( isPrivate:boolean, chatRoomInfo:ChatRoom ) => {
+  if( isPrivate ){
+    return `/message/private/${chatRoomInfo.id}`;
+  }
+  return "/message/public";
+};
 
 function MessageForm() {
 
@@ -24,9 +32,9 @@ function MessageForm() {
   
 
   const handleImageUpload = async ( e:React.ChangeEvent<HTMLInputElement> ) => {
-    
+
     const file = e.target.files![ 0 ];
-    const filePath = `/message/public/${file.name}`;
+    const filePath = `${getPath( chatRoom.isPrivate, chatRoom.currentChatRoom )}/${file.name}`;
     const metadata = { contentType: file.type };
 
     try {

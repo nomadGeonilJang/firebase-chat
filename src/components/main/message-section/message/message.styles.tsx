@@ -22,8 +22,10 @@ span{
 }
 p{
     padding:5px;
-    background-color:gray;
+    display:inline-block;
+    background-color:${color.brown};
     border-radius:5px;
+    max-width:400px;
 }
 p.me{
     background-color:${color.yellow};

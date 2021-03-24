@@ -1,8 +1,8 @@
 type ChatRoom = {
     id: string;
-    description: string;
     name: string;
-    createdBy: {
+    description?: string;
+    createdBy?: {
         name: string;
         image: string;
     };

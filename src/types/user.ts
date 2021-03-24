@@ -4,3 +4,10 @@ export type User = {
     email:string;
     photoURL:string;
 }
+
+export type DBUser = {
+    uid?:string;
+    status?:string;
+    image:string;
+    name:string;
+}
