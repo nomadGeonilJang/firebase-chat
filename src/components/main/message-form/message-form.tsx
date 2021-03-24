@@ -1,3 +1,4 @@
+import Loading from 'components/loading/loading.component';
 import React, { useState, useRef } from 'react';
 import { Form, ProgressBar } from 'react-bootstrap';
 
@@ -18,7 +19,48 @@ function MessageForm() {
   const [ content, setContent ] = useState( "" );
   const [ error, setError ] = useState( "" );
   const [ loading, setLoading ] = useState( false );
+  const [ percent, setPercent ] = useState( 0 );
   const messageRef = useRef( myFirebase.database.ref( "messages" ) );
+
+  const handleImageUpload = async ( e:React.ChangeEvent<HTMLInputElement> ) => {
+    
+    const file = e.target.files![ 0 ];
+    const filePath = `/message/public/${file.name}`;
+    const metadata = { contentType: file.type };
+
+    try {
+      setLoading( true );
+      const uploadedImageRef  = myFirebase.storage
+        .ref()
+        .child( filePath )
+        .put( file, metadata );
+      
+      uploadedImageRef.on( "state_chaged", 
+        uploadImageSnapshot => {
+          const uploadState = Math.round( ( uploadImageSnapshot.bytesTransferred / uploadImageSnapshot.totalBytes ) * 100 ); 
+          setPercent( uploadState );
+        },
+        error => {
+          setLoading( false );
+          alert( error.message );
+        },
+        () => {
+          uploadedImageRef.snapshot.ref
+            .getDownloadURL()
+            .then( downloadURL => {
+              messageRef.current
+                .child( chatRoom.currentChatRoom.id )
+                .push( )
+                .set( createMessage( downloadURL ) );
+              setLoading( false );
+            } );
+        }
+      );
+    } catch ( error ) {
+      setLoading( false );
+      alert( error.message );
+    }
+  };
 
 
   const createMessage = ( fileUrl:string|null = null ) => {
@@ -36,9 +78,7 @@ function MessageForm() {
     }else{
       message[ "content" ] = content;
     }
-
     return message;
-
   };
 
   const handleSubmit = async (  ) => {
@@ -68,31 +108,31 @@ function MessageForm() {
   };
 
   return (
-    <>
-      <MessageContainer>
-        <div className="loading-container">
-          <ProgressBar className="loading" now={80} label={"60%"}/>
-        </div>
-        <Form onSubmit={handleSubmit}> 
-          <Form.Group>
-            <Form.Control 
-              as="textarea" 
-              rows={3} 
-              placeholder="Enter your message" 
-              onChange={handeChangeContent}
-              value={content}
-            />
-          </Form.Group>
-        </Form>
-        <div className="button-group">
-          <button type="button" className="send-btn" onClick={handleSubmit} disabled={loading}>SEND</button>
-          <button >UPLOAD</button>
-        </div>
+    
+    <MessageContainer>
+      <div className="loading-container">
+        {( percent !== 0 && percent !== 100 ) && <ProgressBar className="loading" now={percent} label={`${percent}%`}/>}
+      </div>
+      <Form onSubmit={handleSubmit}> 
+        <Form.Group>
+          <Form.Control 
+            as="textarea" 
+            rows={3} 
+            placeholder="Enter your message" 
+            onChange={handeChangeContent}
+            value={content}
+          />
+        </Form.Group>
+      </Form>
+      <div className="button-group">
+        <button type="button" className="send-btn" onClick={handleSubmit} disabled={loading}>SEND</button>
+        <button onClick={() => imageContentRef.current?.click()} disabled={loading}>UPLOAD</button>
+      </div>
 
-        {error && <span className="error-text">{error}</span>}
-        <input type="file" ref={imageContentRef}/>
-      </MessageContainer>
-    </>
+      {error && <span className="error-text">{error}</span>}
+      <input type="file" ref={imageContentRef} accept="image/*" onChange={handleImageUpload}/>
+    </MessageContainer>
+    
   );
 }
 

@@ -26,7 +26,7 @@ function Message( { message }:MessageProps ) {
           <span>{mement( message.timestamp ).fromNow()}</span>
         </h6>
         {message.image 
-          ? <img style={{ maxWidth: "300px" }} src={message.image} alt={"이미지"}/>
+          ? <img className="content-image" src={message.image} alt={"이미지"}/>
           : (
             <p className={isMine ? "me" : ""}>
               {message.content}
@@ -63,9 +63,12 @@ const MessageMedia = styled( Media )`
         background-color:${color.yellow};
         color:${color.brown};
     }
-    /* p{
-        text-align:end;
-    } */
+    img.content-image{
+      width:100%;
+      height:100%;
+      max-width:300px;
+      max-height:900px;
+    }
 `;
 
 export default Message;
