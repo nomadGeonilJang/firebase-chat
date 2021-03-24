@@ -1,4 +1,3 @@
-import Loading from 'components/loading/loading.component';
 import React, { useState, useRef } from 'react';
 import { Form, ProgressBar } from 'react-bootstrap';
 
@@ -18,6 +17,8 @@ function MessageForm() {
 
   const [ content, setContent ] = useState( "" );
   const [ error, setError ] = useState( "" );
+
+  
   const [ loading, setLoading ] = useState( false );
   const [ percent, setPercent ] = useState( 0 );
   const messageRef = useRef( myFirebase.database.ref( "messages" ) );
