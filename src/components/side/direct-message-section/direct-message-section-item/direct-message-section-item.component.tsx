@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Badge, Image } from 'react-bootstrap';
+import { Image } from 'react-bootstrap';
 import { DBUser } from 'types/user';
 import styled from "styled-components";
 import color from 'utils/style/color';
@@ -43,9 +43,6 @@ function DirectMessageSectionItem( { userInfo }:DirectMessageSectionItemProps ) 
         <Status status={userInfo.status as string} />
         {userInfo.name}
       </div>
-      <div className="dm-right">
-        {<Badge pill variant="danger">0</Badge>}
-      </div>
     </li>
   );
 }
@@ -62,31 +59,6 @@ const Status = styled.div<{status:string}>`
   border-radius:50%;
 `;
 
-
-// const makeDirectRoom = ( user:DBUser ) => {
-
-//     const makeChatRoomId = ( userId:string ) => {
-//       const currentUserId = user.uid!;
-//       return userId > currentUserId ? `${userId}/${currentUserId}` : `${currentUserId}/${userId}`;
-//     };
-
-//     const changeChatRoom = ( user:DBUser ) => {
-//       const chatRoomId = makeChatRoomId( user.uid! );
-//     };
-    
-//     return (
-//       <li key={user.uid} onClick={() => {changeChatRoom( user );}}>
-//         <div className="dm-left">
-//           <Image rounded src={user.image}/>
-//           <Status status={user.status as string} />
-//           {user.name}
-//         </div>
-//         <div className="dm-right">
-//           {<Badge pill variant="danger">0</Badge>}
-//         </div>
-//       </li>
-//     );
-//   };
 
 
 export default DirectMessageSectionItem;
