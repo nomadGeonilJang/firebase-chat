@@ -1,5 +1,4 @@
 import ChatRoom from "types/chat-room";
-import { setCurrentUser } from "../user/user.action";
 import ChatRoomActionTypes from "./chat-room.type";
 
 export const setCurrentChatRoom = ( chatRoom:ChatRoom ) => ( {

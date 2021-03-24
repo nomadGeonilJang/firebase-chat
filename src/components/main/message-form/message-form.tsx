@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Form, ProgressBar } from 'react-bootstrap';
 
 import styled from "styled-components";
+import Message from 'types/message';
 import myFirebase from 'utils/firebase/myFirebase';
 import { useCurrentChatRoom } from 'utils/redux/reducers/chat-room/chat-room.hook';
 import { useCurrentUser } from 'utils/redux/reducers/user/user.hook';
@@ -9,8 +10,10 @@ import color from 'utils/style/color';
 
 function MessageForm() {
 
+  const imageContentRef = useRef<HTMLInputElement>( null );
+
   const chatRoom = useCurrentChatRoom();
-  const { user } = useCurrentUser();
+  const user = useCurrentUser();
 
   const [ content, setContent ] = useState( "" );
   const [ error, setError ] = useState( "" );
@@ -19,12 +22,12 @@ function MessageForm() {
 
 
   const createMessage = ( fileUrl:string|null = null ) => {
-    const message :any = {
-      timestamp: myFirebase.firebase.database.ServerValue.TIMESTAMP,
+    const message :Message = {
+      timestamp: myFirebase.firebase.database.ServerValue.TIMESTAMP as number,
       user: {
-        id: user?.uid,
-        name: user?.displayName,
-        image: user?.photoURL
+        id: user!.uid,
+        name: user!.displayName,
+        image: user!.photoURL
       }
     };
 
@@ -38,8 +41,8 @@ function MessageForm() {
 
   };
 
-  const handleSubmit = async ( e:any ) => {
-  
+  const handleSubmit = async (  ) => {
+
     if( !content.trim() ){
       setError( "Type contents first" );
       return;
@@ -65,30 +68,31 @@ function MessageForm() {
   };
 
   return (
-    <MessageContainer>
-      <div className="loading-container">
-        <ProgressBar className="loading" now={80} label={"60%"}/>
-      </div>
-      <Form onSubmit={handleSubmit}> 
-        <Form.Group>
-          <Form.Control 
-            as="textarea" 
-            rows={3} 
-            placeholder="Enter your message" 
-            onChange={handeChangeContent}
-            value={content}
-          />
-        </Form.Group>
-      </Form>
-      
-      <div className="button-group">
-        <button type="button" className="send-btn" onClick={handleSubmit} disabled={loading}>SEND</button>
-        <button>UPLOAD</button>
-      </div>
+    <>
+      <MessageContainer>
+        <div className="loading-container">
+          <ProgressBar className="loading" now={80} label={"60%"}/>
+        </div>
+        <Form onSubmit={handleSubmit}> 
+          <Form.Group>
+            <Form.Control 
+              as="textarea" 
+              rows={3} 
+              placeholder="Enter your message" 
+              onChange={handeChangeContent}
+              value={content}
+            />
+          </Form.Group>
+        </Form>
+        <div className="button-group">
+          <button type="button" className="send-btn" onClick={handleSubmit} disabled={loading}>SEND</button>
+          <button >UPLOAD</button>
+        </div>
 
-      {error && <span className="error-text">{error}</span>}
-     
-    </MessageContainer>
+        {error && <span className="error-text">{error}</span>}
+        <input type="file" ref={imageContentRef}/>
+      </MessageContainer>
+    </>
   );
 }
 
@@ -139,6 +143,9 @@ const MessageContainer = styled.section`
       opacity:1;
       cursor: not-allowed;
     }
+  }
+  input[type=file]{
+    display:none;
   }
 `;
 

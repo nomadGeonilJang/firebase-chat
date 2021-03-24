@@ -5,18 +5,18 @@ import ChatPage from 'pages/chat/chat.component';
 import LogInPage from 'pages/login/login.component';
 import RegisterPage from 'pages/register/register.component';
 
-import { useCurrentUser } from "utils/redux/reducers/user/user.hook";
-
-const Router = (  ) => {
-  const { user } = useCurrentUser();
+type RouterProps = {
+  isUserLoaded:boolean
+}
+const Router = ( { isUserLoaded }:RouterProps ) => {
   return (
     <Switch>
-      {user && (
+      {isUserLoaded && (
         <Route path="/">
           <ChatPage/>
         </Route>
       )}
-      {!user && (
+      {!isUserLoaded && (
         <>
           <Route path="/">
             <LogInPage/>

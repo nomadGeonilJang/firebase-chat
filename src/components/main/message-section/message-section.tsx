@@ -5,19 +5,15 @@ import { default as MessageType } from 'types/message';
 import Message from 'components/message/message.component';
 import myFirebase from 'utils/firebase/myFirebase';
 import { useCurrentChatRoom } from 'utils/redux/reducers/chat-room/chat-room.hook';
-import { useCurrentUser } from 'utils/redux/reducers/user/user.hook';
+import Loading from 'components/loading/loading.component';
 
 function MessageSection() {
   const chatRoom = useCurrentChatRoom();
-  const { user } = useCurrentUser();
-
   const messageRef = useRef( myFirebase.database.ref( "messages" ) );
-
   const [ messages, setMessage ] =  useState<MessageType[]>( [] );
   const [   messageLoading, setMessageLoading ] = useState( true );
 
   useEffect( () => {
-    console.log( ( chatRoom.currentChatRoom.id ) );
     if( chatRoom.currentChatRoom.id ){
       const messageList:MessageType[] = [];
       messageRef.current
@@ -31,7 +27,7 @@ function MessageSection() {
 
   return (
     <MessageSectionContainer>
-      {messages.map( message => <Message key={message.timestamp} message={message}/> )}   
+      {messageLoading ? <Loading/> : messages.map( message => <Message key={message.timestamp} message={message}/> )}   
     </MessageSectionContainer>
   );
 }

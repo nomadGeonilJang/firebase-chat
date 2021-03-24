@@ -18,7 +18,7 @@ function ChatRoomSection() {
   const [ { name, description }, setRoomState ] = useState( INIT_ROOM_STATE );
   const [ chatRooms, setChatRooms ] = useState<ChatRoom[]>( [] );
   
-  const { user } = useCurrentUser();
+  const user = useCurrentUser();
   const { currentChatRoom  } = useCurrentChatRoom();
   const setCurrentChatRoom = useSetCurrentChatRoom();
 
@@ -131,14 +131,18 @@ const ChatRoomSectionContainer = styled.section`
     display:flex;
     align-items:center;
     justify-content:space-between;
-
     text-transform:uppercase; 
+  }
+
+  .plus{
+    cursor: pointer;
   }
 
   .rooms{
     font-size:1.1rem;
     padding-left:10px;
     li{
+      border-radius:5px;
       padding:5px;
       cursor: pointer;
       &:hover{
@@ -146,6 +150,7 @@ const ChatRoomSectionContainer = styled.section`
       }
     }
     li.active{
+      
       font-weight:bold;
       background-color:${color.yellow};
       color:${color.brown};

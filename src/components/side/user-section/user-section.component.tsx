@@ -13,7 +13,7 @@ function UserSection() {
 
   const fileRef = useRef<HTMLInputElement>( null );
 
-  const { user } = useCurrentUser();
+  const user = useCurrentUser();
   const clearUser = useClearUser();
   const setPhotoURL = useSetPhotoURL();
 
@@ -43,15 +43,14 @@ function UserSection() {
         await myFirebase.database.ref( "users" ).child( user!.uid ).update( { image: photoURL } );
       }
 
-      
     } catch ( error ) {
-      console.log( error );
+      alert( error.message );
     }
   };
 
   return (
     <UserSectionContainer>
-      <h3><IoIosChatboxes/> Chat App</h3>
+      <h3><IoIosChatboxes/> Tech Talk</h3>
       <div className="content">
         <Image src={user?.photoURL} roundedCircle/>
         <Dropdown>

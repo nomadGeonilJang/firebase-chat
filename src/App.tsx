@@ -5,12 +5,13 @@ import myFirebase from 'utils/firebase/myFirebase';
 import Router from 'router';
 import { User } from 'types/user';
 import { useSetCurrentUser } from 'utils/redux/reducers/user/user.hook';
+import Loading from 'components/loading/loading.component';
 
 function App() {
 
-
   const setCurrentUser = useSetCurrentUser();
   const [ initApp, setInitApp ] = useState( false );
+  const [ isUserLoaded, setIsUserLoaded ] = useState( false );
 
   useEffect( () => {
     myFirebase.auth.onAuthStateChanged( ( user ) => {
@@ -24,13 +25,15 @@ function App() {
             uid: user.uid
           };
           setCurrentUser( userObj );
+          setIsUserLoaded( true );
         }, 1000 );
+      }else{
+        setIsUserLoaded( false );
       }
-      
     } );
   }, [] );
 
-  return ( initApp ? <Router/> : <h1>loading..</h1> );
+  return ( initApp ? <Router isUserLoaded={isUserLoaded}/> : <Loading/> );
     
  
 }

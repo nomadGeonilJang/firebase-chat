@@ -1,5 +1,4 @@
 type Message = {
-    image:string|null;
     timestamp:number;
     user:{
         id:string;
@@ -7,5 +6,6 @@ type Message = {
         name:string
     },
     content?:string;
+    image?:string;
 }
 export default Message;

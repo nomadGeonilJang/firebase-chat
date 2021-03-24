@@ -17,7 +17,7 @@ type FormState = {
 function RegisterForm() {
 
   const { register, handleSubmit, watch, errors } = useForm();
-  const password = useRef<any>( null );
+  const password = useRef<unknown>( null );
   password.current = watch( "password" );
 
   

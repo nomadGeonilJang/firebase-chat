@@ -11,7 +11,7 @@ type MessageProps = {
 }
 function Message( { message }:MessageProps ) {
 
-  const { user } = useCurrentUser();
+  const user = useCurrentUser();
   const isMine = user?.uid === message.user.id;
 
 
