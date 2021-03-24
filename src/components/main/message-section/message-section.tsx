@@ -2,7 +2,7 @@
 import React, { useRef, useEffect } from 'react';
 import styled from "styled-components";
 
-import Message from 'components/message/message.component';
+import Message from 'components/main/message-section/message/message.component';
 import Loading from 'components/loading/loading.component';
 
 import { default as MessageType } from 'types/message';

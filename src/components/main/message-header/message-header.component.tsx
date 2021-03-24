@@ -1,6 +1,6 @@
 import React from 'react';
 import { Accordion, Button, Card, FormControl, Image, InputGroup } from 'react-bootstrap';
-import { FaLock } from "react-icons/fa";
+import { FaLock, FaUnlock } from "react-icons/fa";
 import { FcSearch } from "react-icons/fc";
 import { MessageHeaderContainer } from './message-header.styles';
 
@@ -18,7 +18,7 @@ function MessageHeader( { onSearch }:MessageHeaderProps ) {
 
   return (
     <MessageHeaderContainer>
-      <h2><FaLock/> <span>Room:  {chatRoom.currentChatRoom.name}</span></h2>
+      <h2>{chatRoom.isPrivate ? <FaLock/> : <FaUnlock/>}  <span>Room:  {chatRoom.currentChatRoom.name}</span></h2>
       <InputGroup className="mb-3">
         <InputGroup.Prepend>
           <InputGroup.Text id="basic-addon1"><FcSearch/></InputGroup.Text>

@@ -4,7 +4,7 @@ import { FaPlus } from "react-icons/fa";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { ChatRoomSectionContainer, CreateModal } from './chat-room-section.styles';
 
-import { useCurrentChatRoom, useSetCurrentChatRoom } from 'utils/redux/reducers/chat-room/chat-room.hook';
+import { useCurrentChatRoom, useSetCurrentChatRoom, useSetPrivateChatRoom } from 'utils/redux/reducers/chat-room/chat-room.hook';
 import { useCurrentUser } from 'utils/redux/reducers/user/user.hook';
 import myFirebase from 'utils/firebase/myFirebase';
 import ChatRoom from 'types/chat-room';
@@ -14,6 +14,7 @@ function ChatRoomSection() {
   const user = useCurrentUser();
   const { currentChatRoom  } = useCurrentChatRoom();
   const setCurrentChatRoom = useSetCurrentChatRoom();
+  const setPrivateChatRoom = useSetPrivateChatRoom();
 
   const [ show, setShow ] = useState( false );
   const [ { name, description }, setRoomState ] = useState( INIT_ROOM_STATE );
@@ -58,6 +59,7 @@ function ChatRoomSection() {
       if( isFirst && snapshot.exists ){
         isFirst = false;
         setCurrentChatRoom( snapshot.val() );
+        setPrivateChatRoom( false );
       }
     } );
     return () => {
@@ -67,6 +69,7 @@ function ChatRoomSection() {
 
   const handleOpenChat = ( chatRoom:ChatRoom ) => {
     setCurrentChatRoom( chatRoom );
+    setPrivateChatRoom( false );
   };
 
   const makeRoom = ( room:ChatRoom ) => (

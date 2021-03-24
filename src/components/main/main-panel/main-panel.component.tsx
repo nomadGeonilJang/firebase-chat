@@ -23,6 +23,14 @@ function MainPanel() {
   const [ searchResults, setSearchResult ] = useState<Message[]>( [] );
   const [ searchLoading, setSearchLoading ] = useState( false );
 
+
+  useEffect( () => {
+    if( chatRoom.currentChatRoom.id && messages.length === 0 ){
+      setTimeout( () => {
+        setMessageLoading( false );
+      }, 2000 );
+    }
+  }, [ messages ] );
  
   useEffect( () => {
     if( chatRoom.currentChatRoom.id ){
