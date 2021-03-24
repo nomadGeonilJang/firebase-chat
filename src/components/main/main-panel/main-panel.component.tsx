@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect,  useState } from 'react';
 import { MainPanelContainer, MessageSectionContainer } from './main-panel.styles';
 
 import Loading from 'components/loading/loading.component';
@@ -15,13 +15,16 @@ function MainPanel() {
 
   const chatRoom = useCurrentChatRoom();
 
-  const messageRef = useRef( myFirebase.database.ref( "messages" ) );
-
   const [ messages, setMessage ] =  useState<Message[]>( [] );
   const [ messageLoading, setMessageLoading ] = useState( true );
   const [ searchTerm, setSearchTerm ] = useState( "" );
   const [ searchResults, setSearchResult ] = useState<Message[]>( [] );
   const [ searchLoading, setSearchLoading ] = useState( false );
+
+  const [ userPosts, setUserPosts ] = useState<{[key:string]:{
+    image:string;
+    count:number;
+  }}>( {} );
 
 
   useEffect( () => {
@@ -31,20 +34,39 @@ function MainPanel() {
       }, 2000 );
     }
   }, [ messages ] );
+
+  const userPostCount = ( messageList:Message[] ) => {
+    const userPosts = messageList.reduce( ( acc, message ) => {
+      if( message.user.name in acc ){
+        acc[ message.user.name ].count += 1;
+      }else{
+        acc[ message.user.name ] = {
+          image: message.user.image,
+          count: 1
+        };
+      }
+      return acc;
+    }, {} as any );
+
+    setUserPosts( userPosts );
+  };
  
   useEffect( () => {
     if( chatRoom.currentChatRoom.id ){
       const messageList:Message[] = [];
-      messageRef.current
-        .child( chatRoom.currentChatRoom.id ).on( "child_added", ( snap ) => {
-          messageList.push( snap.val() );
-          setMessage( [ ...messageList ] );
-          setMessageLoading( false );
-        } );
+      const messageRef = myFirebase.database.ref( "messages" ).child( chatRoom.currentChatRoom.id );
+
+      messageRef.on( "child_added", ( snap ) => {
+        messageList.push( snap.val() );
+        setMessage( [ ...messageList ] );
+        setMessageLoading( false );
+        userPostCount( [ ...messageList ] );
+      } );
+      
+      return () => {
+        messageRef.off();  
+      };
     }
-    return () => {
-      messageRef.current.off();
-    };
   }, [ chatRoom ] );
 
   const handleChangeSearch = ( e:React.ChangeEvent<HTMLInputElement> ) => {
@@ -73,7 +95,7 @@ function MainPanel() {
 
   return (
     <MainPanelContainer>
-      <MessageHeader onSearch={handleChangeSearch}/>
+      <MessageHeader onSearch={handleChangeSearch} userPosts={userPosts}/>
       <MessageSectionContainer>
         {searchLoading && <Loading />}
         {!searchLoading && <MessageSection messages={searchTerm ? searchResults : messages} messageLoading={messageLoading}/>}
